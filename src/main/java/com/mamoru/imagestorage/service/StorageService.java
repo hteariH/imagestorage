@@ -1,7 +1,7 @@
 package com.mamoru.imagestorage.service;
 
+import com.mamoru.imagestorage.dto.File;
 import org.springframework.core.io.Resource;
-import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Path;
@@ -11,11 +11,11 @@ public interface StorageService {
 
     void init();
 
-    void store(MultipartFile file);
+    File store(MultipartFile file);
 
     Stream<Path> loadAll();
 
-    GridFsResource load(String filename);
+    File load(String filename);
 
     Resource loadAsResource(String filename);
 
