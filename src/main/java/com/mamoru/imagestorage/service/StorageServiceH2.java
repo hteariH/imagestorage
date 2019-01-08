@@ -2,12 +2,8 @@ package com.mamoru.imagestorage.service;
 
 
 import com.mamoru.imagestorage.dto.File;
-import com.mamoru.imagestorage.repository.MongoRepository;
-import com.mongodb.client.gridfs.model.GridFSFile;
+import com.mamoru.imagestorage.repository.ImageRepository;
 import org.springframework.core.io.Resource;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,19 +12,13 @@ import java.nio.file.Path;
 import java.util.stream.Stream;
 
 @Service
-public class StorageServiceMongo implements StorageService{
-
-    private GridFsTemplate gridFsTemplate;
-
-    private MongoRepository mongoRepository;
-//    @Autowired
-//    public StorageServiceMongo(GridFsTemplate gridFsTemplate) {
-//        this.gridFsTemplate = gridFsTemplate;
-//    }
+public class StorageServiceH2 implements StorageService{
 
 
-    public StorageServiceMongo(MongoRepository mongoRepository) {
-        this.mongoRepository = mongoRepository;
+    private ImageRepository imageRepository;
+
+    public StorageServiceH2(ImageRepository imageRepository) {
+        this.imageRepository = imageRepository;
     }
 
     @Override
@@ -47,7 +37,8 @@ public class StorageServiceMongo implements StorageService{
             File file1 = new File();
             file1.setName(name);
             file1.setFile(bytes);
-            File file2 = mongoRepository.saveFile(file1);
+            file1.setContentType(file.getContentType());
+            File file2 = imageRepository.save(file1);
             System.out.println("file id="+file2.getId());
             return file1;
         } catch (IOException e) {
@@ -63,7 +54,7 @@ public class StorageServiceMongo implements StorageService{
 
     @Override
     public File load(String filename) {
-        return mongoRepository.findByName(filename).get(0);
+        return imageRepository.findFirstByName(filename).get(0);
     }
 
     @Override

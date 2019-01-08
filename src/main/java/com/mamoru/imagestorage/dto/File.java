@@ -1,26 +1,32 @@
 package com.mamoru.imagestorage.dto;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
+//import org.springframework.data.mongodb.core.mapping.Document;
 
+import org.hibernate.annotations.Type;
+
+import javax.persistence.*;
 import java.util.Arrays;
 
-@Document(collection = "file")
+//@Document(collection = "file")
+@Entity(name = "file")
 public class File {
 
     @Id
-    String id;
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    Long id;
 
     String name;
 
+    @Column(columnDefinition = "LONGBLOB")
     byte[] file;
 
+    String contentType;
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -40,11 +46,19 @@ public class File {
         this.file = file;
     }
 
+    public String getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(String contentType) {
+        this.contentType = contentType;
+    }
+
     public File() {
 
     }
 
-    public File(String id, String name, byte[] file) {
+    public File(Long id, String name, byte[] file) {
         this.id = id;
         this.name = name;
         this.file = file;

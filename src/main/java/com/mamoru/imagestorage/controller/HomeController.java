@@ -2,12 +2,8 @@ package com.mamoru.imagestorage.controller;
 
 import com.mamoru.imagestorage.dto.File;
 import com.mamoru.imagestorage.service.StorageService;
-import com.mamoru.imagestorage.service.StorageServiceMongo;
-import com.mongodb.client.gridfs.model.GridFSFile;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
-import org.springframework.data.mongodb.gridfs.GridFsResource;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -47,7 +43,7 @@ public class HomeController {
     public void getImage(@PathVariable String filename, HttpServletResponse response) throws IOException {
         File load = storageService.load(filename);
         System.out.println("filename="+load.getName());
-        response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        response.setContentType(load.getContentType());
         ByteArrayInputStream bytes = new ByteArrayInputStream(load.getFile());
         IOUtils.copy(bytes, response.getOutputStream());
     }
